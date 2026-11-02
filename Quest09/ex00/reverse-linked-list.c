@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+// pas sûr de ce que fait struct.h
+#include "struct.h"
 
 #ifndef STRUCT_LISTNODE
+// comment pourrais-je utiliser STRUCT_LISTNODE ?
 #define STRUCT_LISTNODE
 typedef struct s_listnode
 {
@@ -10,24 +13,67 @@ typedef struct s_listnode
 } listnode;
 #endif
 
-#include "struct.h"
-
-listnode* reverse_linked_list()
+// fonctions que j'ai copier de quelque part pour pouvoir débugger pour maintenant
+// je verrais comment faire moi même plus tard
+void solve(listnode *head, int *res, int *size)
 {
-    listnode *reverse;
+    if (head == NULL)
+        return;
+    res[(*size)++] = head->val;
+    solve(head->next, res, size);
+}
 
-    reverse = (struct s_listnode *)malloc(sizeof(struct s_listnode));
-
-    for (int index = 0; index < 5; index++) {
-        reverse->val = index;        
-        reverse->next = reverse;
+void printArray(int *arr, int size)
+{
+    printf("[");
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d", arr[i]);
+        if (i < size - 1)
+            printf(", ");
     }
-    
-    printf("%d", &reverse);
-    return reverse;
+    printf("]\n");
+}
+
+listnode* reverse_linked_list(listnode* param_1)
+{
+    listnode* link_list = (listnode *)malloc(sizeof(listnode));;
+    listnode* reverse_link = (listnode *)malloc(sizeof(listnode));;
+
+    link_list->val = 1;        
+    link_list->next = (listnode *)malloc(sizeof(listnode));
+    link_list->next->val = 2;
+    link_list->next->next = (listnode *)malloc(sizeof(listnode));
+    link_list->next->next->val = 3;
+    link_list->next->next->next = (listnode *)malloc(sizeof(listnode));
+    link_list->next->next->next->val = 4;
+    link_list->next->next->next->next = (listnode *)malloc(sizeof(listnode));
+    link_list->next->next->next->next->val = 5;
+    link_list->next->next->next->next->next = NULL;
+
+    // comment inverser une liste chainé de manière efficace quand on ne sait pas le nombre d'objets dans cette liste à l'avance ?
+    // existe t-il un moyen de répondre à cette question avec une boucle ?
+    reverse_link->val = link_list->next->next->next->next->val;        
+    reverse_link->next = (listnode *)malloc(sizeof(listnode));
+    reverse_link->next->val = link_list->next->next->next->val;
+    reverse_link->next->next = (listnode *)malloc(sizeof(listnode));
+    reverse_link->next->next->val = link_list->next->next->val;
+    reverse_link->next->next->next = (listnode *)malloc(sizeof(listnode));
+    reverse_link->next->next->next->val = link_list->next->val;
+    reverse_link->next->next->next->next = (listnode *)malloc(sizeof(listnode));
+    reverse_link->next->next->next->next->val = link_list->val;
+    reverse_link->next->next->next->next->next = NULL;
+
+    int size = 0;
+    int *res = (int *)malloc(6 * sizeof(int));
+    solve(reverse_link, res, &size);
+    printArray(res, size);
+
+    return reverse_link;
 }
 
 int main () {
+    // comment entrer une valeur de type "listnode *" ?
     reverse_linked_list();
 
     return 0;
