@@ -46,33 +46,32 @@ int ln_linked_list(listnode* list_count) {
     return length;
 }
 
-listnode* removing(listnode *list, listnode *remove_list, int nth, int test)
+listnode* removing(listnode *list, int nth, int index)
 {
-    if (list == NULL) {
+    if (index == nth) {
+        list = list->next;
+    }
+    
+    if (list != NULL) {
+        listnode* remove_list = (listnode*)malloc(sizeof(listnode));
+
+        remove_list->val = list->val;
+
+        remove_list->next = removing(list->next, nth, index+1);
+
         return remove_list;
     }
 
-    if (test != nth) {
-        remove_list->val = list->val;
-        remove_list->next = (listnode *)malloc(sizeof(listnode));
-        return removing(list->next, remove_list->next, nth, test--);
-    }
-    else {
-        return removing(list->next, remove_list, nth, test--);
-    }
+    return 0;
 }
 
 listnode* remove_nth_node_from_end_of_list(listnode* param_1, int param_2)
 {
     listnode* removed_link_list = (listnode *)malloc(sizeof(listnode));
 
-    removed_link_list = removing(param_1, NULL, param_2, 5);
-
-    /*for (int index = 1; index < ln_linked_list(param_1); index++) {
-        if (index != ln_linked_list(param_1) - param_2) {
-
-        }
-    }*/
+    if (param_2 <= ln_linked_list(param_1) && param_2 > 0) {
+        removed_link_list = removing(param_1, (ln_linked_list(param_1) - param_2 + 1), 1);
+    }
 
     return removed_link_list;
 }
@@ -81,16 +80,8 @@ int main () {
     listnode* linked_list = (listnode *)malloc(sizeof(listnode));
 
     linked_list->val = 1;
-    linked_list->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->val = 2;
-    linked_list->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->val = 3;
-    linked_list->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->val = 4;
-    linked_list->next->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->next->val = 5;
 
-    printf_linked_list(remove_nth_node_from_end_of_list(linked_list, 2));
+    printf_linked_list(remove_nth_node_from_end_of_list(linked_list, 1));
 
     return 0;
 }
