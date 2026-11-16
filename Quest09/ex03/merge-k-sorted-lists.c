@@ -27,26 +27,45 @@ void solve(listnode *head, int *res, int *size)
     solve(head->next, res, size);
 }
 
-void printArray(int *arr, int size)
+void print_linked_list(int *arr, int size)
 {
     for (int i = 0; i < size; i++)
     {
         printf("%d", arr[i]);
-        printf("->");
+
+        if (i < size - 1) {
+            printf("->");
+        }
     }
-    printf("NULL\n");
 }
 
-void printf_linked_list(listnode *param_1) {
-    int size = 0;
-    int *res = (int *)malloc(6 * sizeof(int));
-    solve(param_1, res, &size);
-    printArray(res, size);
+void printf_array(listnode_array* param_1, int nb) {
+    printf("[");
+
+    for (int index = 0; index < nb; index++) {
+        int size = 0;
+        int *res = (int *)malloc(6 * sizeof(int));
+
+        listnode* print_list = (listnode *)malloc(sizeof(listnode));
+        print_list = param_1->array[index];
+
+        solve(print_list, res, &size);
+
+        print_linked_list(res, size);
+
+        if (index < nb - 1) {
+            printf(", ");
+        }
+    }
+
+    printf("]");
 }
 
 listnode* merge_k_sorted_lists(listnode_array* param_1)
 {
-    return param_1
+    printf_array(param_1, 3);
+
+    return 0;
 }
 
 int main () {
@@ -75,11 +94,13 @@ int main () {
     linked_list3->next->val = 6;
     linked_list3->next->next = NULL;
 
-    linked_list_array[0] = linked_list1;
-    linked_list_array[1] = linked_list2;
-    linked_list_array[2] = linked_list3;
+    linked_list_array->array = (listnode **)malloc(sizeof(listnode_array));
 
-    printf_linked_list(merge_k_sorted_lists(linked_list_array));
+    linked_list_array->array[0] = linked_list1;
+    linked_list_array->array[1] = linked_list2;
+    linked_list_array->array[2] = linked_list3;
+
+    merge_k_sorted_lists(linked_list_array);
 
     return 0;
 }
