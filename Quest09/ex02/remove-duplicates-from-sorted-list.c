@@ -51,21 +51,18 @@ listnode* removing(listnode *list)
     if (list == NULL) {
         return 0;
     }
-    else {
-        while (list->val == list->next->val) {
-                list = list->next;
-        }
-
-        listnode* remove_list = (listnode*)malloc(sizeof(listnode));
-
-        remove_list->val = list->val;
-
-        remove_list->next = removing(list->next);
-
-        return remove_list;
+    
+    while (list->next != NULL && list->val == list->next->val) {
+        list = list->next;
     }
 
-    return 0;
+    listnode* remove_list = (listnode*)malloc(sizeof(listnode));
+
+    remove_list->val = list->val;
+
+    remove_list->next = removing(list->next);
+
+    return remove_list;
 }
 
 listnode* remove_duplicates_from_sorted_list(listnode* param_1)
@@ -84,10 +81,12 @@ int main () {
     linked_list->next = (listnode *)malloc(sizeof(listnode));
     linked_list->next->val = 1;
     linked_list->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->val = 1;
+    linked_list->next->next->val = 2;
     linked_list->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->val = 1;
-    linked_list->next->next->next->next = NULL;
+    linked_list->next->next->next->val = 3;
+    linked_list->next->next->next->next = (listnode *)malloc(sizeof(listnode));
+    linked_list->next->next->next->next->val = 3;
+    linked_list->next->next->next->next->next = NULL;
 
     printf_linked_list(remove_duplicates_from_sorted_list(linked_list));
 
