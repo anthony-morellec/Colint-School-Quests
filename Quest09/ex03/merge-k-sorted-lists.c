@@ -45,60 +45,58 @@ void printf_linked_list(listnode *param_1) {
     print_linked_list(res, size);
 }
 
-void printf_array(listnode_array* param_1) {
-    for (int index = 0; index != param_1->size; index++) {
-        int size = 0;
-        int *res = (int *)malloc(6 * sizeof(int));
+listnode* merge_two_lists(listnode* l1, listnode* l2)
+{
+    listnode dummy;
+    listnode* current = &dummy;
 
-        listnode* print_list = (listnode *)malloc(sizeof(listnode));
-        print_list = param_1->array[index];
+    dummy.next = NULL;
 
-        solve(print_list, res, &size);
-
-        print_linked_list(res, size);
-
-        if (index < param_1->size-1) {
-            printf("->");
+    while (l1 != NULL && l2 != NULL)
+    {
+        if (l1->val <= l2->val)
+        {
+            current->next = l1;
+            l1 = l1->next;
         }
-    }
-    printf_linked_list(param_1->array[2]);
+        else
+        {
+            current->next = l2;
+            l2 = l2->next;
+        }
 
+        current = current->next;
+    }
+
+    if (l1 != NULL) {
+        current->next = l1;
+    }
+    else {
+        current->next = l2;
+    }
+
+    return dummy.next;
 }
 
-
-
-/*listnode* sorting(listnode* param_1, listnode* param_2, listnode* param_3) {
-    if (param_1 == NULL) {
-        return param_3;
-    }
-
-    if (param_1->val > param_2->val) {
-        param_3 = param_2;
-        param_2 = param_1;
-        param_1 = param_3;
-    }
-
-    printf("param_1 : ");
-    printf_linked_list(param_1);
-    printf("\n");
-
-    printf("param_2 : ");
-    printf_linked_list(param_2);
-    printf("\n");
-    
-    printf("param_3 : ");
-    printf_linked_list(param_3);
-    printf("\n");
-
-    return sorting(param_2, param_3, param_1);
-}*/
-
-listnode* merge_k_sorted_lists(listnode_array* param_1)
+listnode* merge(listnode_array* list_array)
 {
-    printf_linked_list(param_1->array[2]);
-        printf("\n");
+    if (list_array == NULL || list_array->size == 0) {
+        return 0;
+    }
 
-    printf_array(param_1);
+    listnode* merged_list = NULL;
+
+    for (int array_index = 0; array_index < list_array->size; array_index++)
+    {
+        merged_list = merge_two_lists(merged_list, list_array->array[array_index]);
+    }
+
+    return merged_list;
+}
+
+listnode* merge_k_sorted_lists(listnode_array* linked_list_array)
+{
+    printf_linked_list(merge(linked_list_array));
  
     return 0;
 }
@@ -107,10 +105,10 @@ int main () {
     listnode* linked_list1 = (listnode *)malloc(sizeof(listnode));
     listnode* linked_list2 = (listnode *)malloc(sizeof(listnode));
     listnode* linked_list3 = (listnode *)malloc(sizeof(listnode));
-    listnode* linked_list4 = (listnode *)malloc(sizeof(listnode));
 
     listnode_array* linked_list_array = (listnode_array *)malloc(sizeof(listnode_array));
-
+    linked_list_array->size = 3;
+    
     linked_list1->val = 1;
     linked_list1->next = (listnode *)malloc(sizeof(listnode));
     linked_list1->next->val = 4;
@@ -130,45 +128,13 @@ int main () {
     linked_list3->next->val = 6;
     linked_list3->next->next = NULL;
 
-    linked_list4->val = 2;
-    linked_list4->next = (listnode *)malloc(sizeof(listnode));
-    linked_list4->next->val = 6;
-    linked_list4->next->next = NULL;
-
-    linked_list_array->array = (listnode **)malloc(sizeof(listnode_array));
+    linked_list_array->array = malloc(linked_list_array->size * sizeof(listnode*));
 
     linked_list_array->array[0] = linked_list1;
     linked_list_array->array[1] = linked_list2;
     linked_list_array->array[2] = linked_list3;
-    linked_list_array->array[3] = linked_list4;
-
-
-    linked_list_array->size = 4;
-
-    merge_k_sorted_lists(linked_list_array);
-
-    /*listnode* linked_list = (listnode *)malloc(sizeof(listnode));
-
-    linked_list->val = 1;
-    linked_list->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->val = 4;
-    linked_list->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->val = 5;
-    linked_list->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->val = 1;
-    linked_list->next->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->next->val = 3;
-    linked_list->next->next->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->next->next->val = 4;
-    linked_list->next->next->next->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->next->next->next->val = 2;
-    linked_list->next->next->next->next->next->next->next = (listnode *)malloc(sizeof(listnode));
-    linked_list->next->next->next->next->next->next->next->val = 6;
-    linked_list->next->next->next->next->next->next->next->next = NULL;
-
-    // printf_linked_list(linked_list);
     
-    printf_linked_list(sorting(linked_list, linked_list->next, NULL));*/
+    merge_k_sorted_lists(linked_list_array);
 
     return 0;
 }
